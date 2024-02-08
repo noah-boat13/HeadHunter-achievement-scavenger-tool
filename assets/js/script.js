@@ -70,6 +70,62 @@ for(var i = 0; i < demoArray.length; i++){
     
     achievementBoxEl.appendChild(articleEl)
 
+    var divMediaLeft = document.createElement('div')
+    divMediaLeft.classList = "media-left"
+
+    articleEl.appendChild(divMediaLeft)
+
+    var imgHolder = document.createElement('figure')
+    imgHolder.classList = "image is-64x64"
+
+    divMediaLeft.appendChild(imgHolder)
+
+    var achievementImg = document.createElement('img')
+    //gets the image from the results
+    achievementImg.src = demoArray[i].image
+
+    imgHolder.appendChild(achievementImg)
+
+    var contentHolder = document.createElement('div')
+    contentHolder.classList = "media-content"
+
+    articleEl.appendChild(contentHolder)
+
+    var contentDiv = document.createElement('div')
+    contentDiv.classList = "content"
+
+    contentHolder.appendChild(contentDiv)
+
+    var achievementInfo = document.createElement('p')
+
+    contentDiv.appendChild(achievementInfo)
+
+    var achievementName = document.createElement('strong')
+    achievementName.classList = "has-text-warning-dark"
+    //gets the achievement name
+    achievementName.textContent = demoArray[i].name
+
+    achievementInfo.appendChild(achievementName)
+
+    var spacing = document.createElement('br')
+    achievementName.appendChild(spacing)
+
+    var achievementPercent = document.createElement('small')
+    //get achievement percentage
+    achievementPercent.textContent = demoArray[i].percent + "% of players have completed"
+    
+    achievementInfo.appendChild(achievementPercent)
+
+    var spacing = document.createElement('br')
+    achievementPercent.appendChild(spacing)
+
+    var achievementDescription = document.createElement('small')
+    //get achievement description
+    achievementDescription.textContent = "Achievement Description: " + demoArray[i].description
+
+    achievementInfo.appendChild(achievementDescription)
+
+    
 }
 }
 
