@@ -8,14 +8,14 @@
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
   />
-  <link
+  <!-- <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bulma/sass/utilities/_all.sass"
   />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
+  /> -->
 </head>
 <body>
     <nav>
@@ -215,6 +215,23 @@
            </div>
         </article>
       </div>
-              
+      <div id="modal-js-example" class="modal">
+        <div class="modal-background"></div>
+      
+        <div class="modal-content">
+          <div class="box has-background-dark">
+        <iframe id="ytplayer" type="text/html" width="600" height="360" class="is-vcentered"
+          src="https://www.youtube.com/embed/9FiBfWJVQZ8?autoplay=1&origin=http://example.com"
+          frameborder="0">
+        </iframe>
+          </div>
+        </div>
+      
+        <button class="modal-close is-large" aria-label="close"></button>
+      </div>
+      <button class="js-modal-trigger" data-target="modal-js-example">
+        Modal Button
+      </button>
+      <script src="./assets/js/script.js"></script>
 </body>
 </html>
