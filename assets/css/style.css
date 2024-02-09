@@ -26,3 +26,16 @@
     font-weight: 400;
     font-size: 18px;
 }
+
+.game-img {
+    border-radius: 5px;
+}
+
+.game-title {
+    border-radius: 5px;
+}
+
+.mycard {
+    margin: 10px;
+    border-radius: 10px;
+  }
