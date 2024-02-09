@@ -11,7 +11,7 @@ When I click on the on the video/information
 Then I am taken to the YouTube information to how to complete the achievement  
 
 
-
+Simple text added Vic seeing if his laptop is set up to push
 
 
 
