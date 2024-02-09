@@ -1,0 +1,28 @@
+.quote {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 500;
+    font-size: 48px;
+}
+
+.main-header {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 600;
+    font-size: 72px;
+}
+.game-input {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 400;
+    font-size: 42px;
+}
+
+.game-search-btn {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 400;
+    font-size: 24px;
+}
+
+.achievement-box {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+}

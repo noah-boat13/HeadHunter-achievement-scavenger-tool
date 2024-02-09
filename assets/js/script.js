@@ -60,7 +60,7 @@ var demoArray = [
 // loop to append achievements to the page
 for(var i = 0; i < demoArray.length; i++){
     var achievementBoxEl = document.createElement('div')
-    achievementBoxEl.classList = "box has-background-dark has-text-warning-dark";
+    achievementBoxEl.classList = "achievement-box box has-background-dark has-text-warning-dark";
 
     testDivEl.appendChild(achievementBoxEl)
 
