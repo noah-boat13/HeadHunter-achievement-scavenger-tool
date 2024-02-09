@@ -60,7 +60,7 @@ var demoArray = [
 // loop to append achievements to the page
 for(var i = 0; i < demoArray.length; i++){
     var achievementBoxEl = document.createElement('div')
-    achievementBoxEl.classList = "achievement-box box has-background-dark has-text-warning-dark";
+    achievementBoxEl.classList = "achievement-box";
 
     testDivEl.appendChild(achievementBoxEl)
 
@@ -76,14 +76,14 @@ for(var i = 0; i < demoArray.length; i++){
     articleEl.appendChild(divMediaLeft)
 
     var imgHolder = document.createElement('figure')
-    imgHolder.classList = "image is-64x64"
+    imgHolder.classList = "image is-64x64 mt-2 mx-2"
 
     divMediaLeft.appendChild(imgHolder)
 
     var achievementImg = document.createElement('img')
+    
     //gets the image from the results
     achievementImg.src = demoArray[i].image
-
     imgHolder.appendChild(achievementImg)
 
     var contentHolder = document.createElement('div')
@@ -92,19 +92,18 @@ for(var i = 0; i < demoArray.length; i++){
     articleEl.appendChild(contentHolder)
 
     var contentDiv = document.createElement('div')
-    contentDiv.classList = "content"
+    contentDiv.classList = "content", "is-vcentered"
     contentHolder.appendChild(contentDiv)
     
 
     var achievementInfo = document.createElement('p')
-    achievementInfo.style.color = "#95211C"
     contentDiv.appendChild(achievementInfo)
 
     var achievementName = document.createElement('strong')
-    achievementName.classList = "has-text-warning-dark"
+    achievementName.classList = "achievement-name"
     //gets the achievement name
     achievementName.textContent = demoArray[i].name
-
+//
     achievementInfo.appendChild(achievementName)
 
     var spacing = document.createElement('br')
@@ -115,7 +114,7 @@ for(var i = 0; i < demoArray.length; i++){
     achievementPercent.textContent = demoArray[i].percent + "% of players have completed"
     
     achievementInfo.appendChild(achievementPercent)
-
+//
     var spacing = document.createElement('br')
     achievementPercent.appendChild(spacing)
 
@@ -124,7 +123,7 @@ for(var i = 0; i < demoArray.length; i++){
     achievementDescription.textContent = "Achievement Description: " + demoArray[i].description
 
     achievementInfo.appendChild(achievementDescription)
-
+//
     
 }
 }

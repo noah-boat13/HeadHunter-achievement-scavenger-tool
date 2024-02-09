@@ -8,21 +8,55 @@
     font-family: 'Orbitron', sans-serif;
     font-weight: 600;
     font-size: 72px;
-}
-.game-input {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 400;
-    font-size: 42px;
+    border-radius: 71px 71px 71px 71px;
 }
 
-.game-search-btn {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 400;
-    font-size: 24px;
+    .game-input {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 400;
+        font-size: 42px;
+        text-shadow: rgba(36, 231, 189, 0.692) 5px 0 5px;
+        color: black;
+        
+        
+    }
+
+    .game-search-btn {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 400;
+        font-size: 24px;
+        text-shadow: 1px 1px 2px rgba(255, 251, 0, 0.575), 0 1 1em #392a8d6e, 0 0 0.4em #a711b8;
+        
+    }
+/* styling for achievement box */
+    .achievement-box {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        background-color:#392a8d6e;
+        margin: 10px;
+        color: #74cc2b;
+    }
+    /* styling for content inside achievement box */
+    .achievement-name {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        margin: 10px;
+        color: #74cc2b;
+
+    }
+
+
+h1 {
+    text-shadow: #FC0 1px 0 10px;
 }
 
-.achievement-box {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 400;
-    font-size: 18px;
+
+
+p, button {
+    text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+    color: #EE61FF;
 }
+
+.
