@@ -93,11 +93,11 @@ for(var i = 0; i < demoArray.length; i++){
 
     var contentDiv = document.createElement('div')
     contentDiv.classList = "content"
-
     contentHolder.appendChild(contentDiv)
+    
 
     var achievementInfo = document.createElement('p')
-
+    achievementInfo.style.color = "#95211C"
     contentDiv.appendChild(achievementInfo)
 
     var achievementName = document.createElement('strong')
