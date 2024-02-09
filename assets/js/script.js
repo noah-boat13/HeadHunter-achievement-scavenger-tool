@@ -1,5 +1,10 @@
 //test div for test achievement list
 var testDivEl = document.querySelector("#test-div")
+//test div for game cards
+var gameSearchCards = document.querySelector(".gameSearch")
+
+var gameCardsEl = document.querySelectorAll(".mycard")
+console.log(gameCardsEl)
 
 var gameSearchInput = document.querySelector("#game-search");
 var searchBtn = document.querySelector("#search-button");
@@ -19,6 +24,8 @@ var ytURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxRe
 function searchGame(){
 fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search=" + gameSearchKeyword).then(res => res.json()).then(data=> {
     console.log(data);
+
+    console.log(data.results[0].background_image)
 })
 }
 
@@ -129,7 +136,64 @@ for(var i = 0; i < demoArray.length; i++){
 }
 }
 
-createAchievementList()
+// createAchievementList()
+
+function createGameCards (){
+  //demo games array
+  var gamesArray = [
+    {
+      "image": "https://media.rawg.io/media/games/7cf/7cfc9220b401b7a300e409e539c9afd5.jpg",
+
+      "name": "The Elder Scrolls V: Skyrim",
+
+      "id": 5679
+    },
+    {
+      "image": "https://media.rawg.io/media/games/41b/41bdc2174dce7d9c47e2bf4ee7ecb80a.jpg",
+
+      "name": "The Elder Scrolls V: Skyrim - Dawnguard",
+
+      "id": 41456
+    }
+  ]
+  var gameCardsHolder = document.createElement('div')
+  gameCardsHolder.classList = "columns is-centered"
+  gameSearchCards.appendChild(gameCardsHolder)
+  for(i=0; i < gamesArray.length; i++){
+    //get rid of this first one and make the og div being appended to have these classes
+
+
+    var gameCard = document.createElement('div')
+    gameCard.classList = "column achievement-box is-one-fifth mycard"
+    gameCardsHolder.appendChild(gameCard)
+
+    var outterGameImgHolder = document.createElement('div')
+    outterGameImgHolder.classList = "card-iamge"
+    gameCard.appendChild(outterGameImgHolder)
+
+    var gameImgHolder = document.createElement('figure')
+    gameImgHolder.classList = "image is-4by3"
+    outterGameImgHolder.appendChild(gameImgHolder)
+
+    var gameImg = document.createElement('img')
+    gameImg.classList = "game-img"
+    gameImg.src = gamesArray[i].image
+    gameImgHolder.appendChild(gameImg)
+
+    var gameNameHolder = document.createElement('div')
+    gameCardsHolder.appendChild(gameNameHolder)
+
+    var gameName = document.createElement('p')
+    gameName.classList = "game-title has-text-centered py-1 mt-2"
+    gameName.style = "background-color: black;color: #95211C"
+    gameName.textContent = gamesArray[i].name
+    gameNameHolder.appendChild(gameName)
+
+  }
+  console.log(gameCardsHolder)
+}
+
+createGameCards()
 // search youtube for how to's on selected achievment
 var ytAltURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&part=player&maxResults=25&q=surfing&videoEmbeddable=true&key=[YOUR_API_KEY]"
 
