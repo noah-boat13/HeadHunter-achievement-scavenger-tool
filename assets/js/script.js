@@ -48,17 +48,18 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
         gameCard.setAttribute("data-gameID", data.results[i].id)
 
         gameCard.addEventListener("click", function(){
-                  
+
           selectedGameId =""
           selectedGameImg = ""
           selectedGameName = gameName.textContent
           selectedGameId = gameCard.getAttribute("data-gameId")
-
+  
           console.log(selectedGameImg)
           console.log(selectedGameName)
           console.log(selectedGameId)
           
         })
+
         gameCardsHolder.appendChild(gameCard)
     
         var outterGameImgHolder = document.createElement('div')
@@ -84,6 +85,10 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
     
       }
       console.log(gameSearchCards)
+
+      var gameCardsOnPage = document.querySelectorAll(".mycard")
+      console.log(gameCardsOnPage)
+      
     }
 
     createGameCards();
