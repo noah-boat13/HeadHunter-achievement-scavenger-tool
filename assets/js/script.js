@@ -1,8 +1,19 @@
 //test div for test achievement list
 var testDivEl = document.querySelector("#test-div")
+//test div for game cards
+var gameSearchCards = document.querySelector(".gameSearch")
+var loadMoreDiv = document.querySelector("#loadMore")
+
+var gameCardsEl = document.querySelectorAll(".mycard")
+console.log(gameCardsEl)
 
 var gameSearchInput = document.querySelector("#game-search");
 var searchBtn = document.querySelector("#search-button");
+
+//holds the selected games information
+var selectedGameImg = ""
+var selectedGameName = ""
+var selectedGameId = ""
 // our youtube key
 const ytKey = "AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY";
 
@@ -19,17 +30,95 @@ var ytURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxRe
 function searchGame(){
 fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search=" + gameSearchKeyword).then(res => res.json()).then(data=> {
     console.log(data);
+
+    console.log(data.results[0].background_image)
+      var count = 0
+      var countLimiter = 4
+    function createGameCards (){
+
+      var gameCardsHolder = document.createElement('div')
+      gameCardsHolder.classList = "columns is-centered"
+      gameSearchCards.appendChild(gameCardsHolder);
+      
+      for(i=count; i < countLimiter; i++){
+        
+        var gameCard = document.createElement('div')
+        gameCard.classList = "column achievement-box is-one-fifth mycard"
+        //
+        gameCard.setAttribute("data-gameID", data.results[i].id)
+
+        gameCard.addEventListener("click", function(){
+
+          selectedGameId =""
+          selectedGameImg = ""
+          selectedGameName = gameName.textContent
+          selectedGameId = gameCard.getAttribute("data-gameId")
+  
+          console.log(selectedGameImg)
+          console.log(selectedGameName)
+          console.log(selectedGameId)
+          
+        })
+
+        gameCardsHolder.appendChild(gameCard)
+    
+        var outterGameImgHolder = document.createElement('div')
+        outterGameImgHolder.classList = "card-iamge"
+        gameCard.appendChild(outterGameImgHolder)
+    
+        var gameImgHolder = document.createElement('figure')
+        gameImgHolder.classList = "image is-4by3"
+        outterGameImgHolder.appendChild(gameImgHolder)
+    
+        var gameImg = document.createElement('img')
+        gameImg.classList = "game-img"
+        gameImg.src = data.results[i].background_image
+        gameImgHolder.appendChild(gameImg)
+    
+        var gameNameHolder = document.createElement('div')
+        gameCard.appendChild(gameNameHolder)
+    
+        var gameName = document.createElement('p')
+        gameName.classList = "game-title has-text-centered py-1 mt-2"
+        gameName.textContent = data.results[i].name
+        gameNameHolder.appendChild(gameName)
+    
+      }
+      console.log(gameSearchCards)
+
+      var gameCardsOnPage = document.querySelectorAll(".mycard")
+      console.log(gameCardsOnPage)
+      
+    }
+
+    createGameCards();
+
+    var loadMoreBtn = document.createElement('btn')
+    loadMoreBtn.classList = "game-search-btn button is-light is-large py-5 my-7 ml-6 mr-6"
+    loadMoreBtn.style = "background-color: black; color: #74cc2b;"
+    loadMoreBtn.textContent = "Load More"
+    loadMoreBtn.addEventListener ("click", function(){
+      count = count + 4;
+      countLimiter = countLimiter + 4;
+      createGameCards()
+    })
+    loadMoreDiv.appendChild(loadMoreBtn)
+
 })
 }
 
 // when the search button is clicked it updates the value to enter into the url to search the game
 searchBtn.addEventListener("click", function(event){
     event.preventDefault();
-
+    gameSearchCards.innerHTML = ""
+    loadMoreDiv.innerHTML = ""
     gameSearchKeyword = gameSearchInput.value.trim()
     console.log (gameSearchKeyword)
+
+
     
     searchGame();
+  
 })
 
 // get achievments from searched Game
@@ -129,6 +218,8 @@ for(var i = 0; i < demoArray.length; i++){
 }
 
 createAchievementList()
+
+
 // search youtube for how to's on selected achievment
 var ytAltURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&part=player&maxResults=25&q=surfing&videoEmbeddable=true&key=[YOUR_API_KEY]"
 
