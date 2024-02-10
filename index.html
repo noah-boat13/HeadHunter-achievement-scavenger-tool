@@ -9,10 +9,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     />
-    <link
+    <!-- <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma/sass/utilities/_all.sass"
-    />
+    /> -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -35,9 +35,9 @@
       </p>
     </nav>
       <section class="container my-6 py-6">
-        <div class="container is-fluid my-6 mgh-large has-text-centered">
-          <div class="block">
-            <div class="box py-4" style="background-color: #392a8d6e">
+        <div class="container is-fluid my-6 mgh-large has-text-centered" >
+          <div class="block" id="search-box-holder" >
+            <div class="box py-4" id="search-game-box" style="background-color: #392a8d6e">
               <h1
                 class="main-header title is-1 is-large is-uppercase has-text-centered" style="color: #74cc2b"
               >
@@ -57,13 +57,10 @@
                 Select Your Path
               </button>
             </div>
+            <div class="selectedGame column is-one-fifth"></div>
           </div>
         </div>
-        <div 
-        class="container is-fluid my-6 mgh-large has-text-centered"
-        id="test-div">
 
-        </div>
         <div class="gameSearch">
 
         </div>
@@ -71,6 +68,13 @@
         <br>
 
         <div id="loadMore"></div>
+
+        <div 
+        class="container is-fluid my-6 mgh-large has-text-centered"
+        id="achievement-div">
+
+        </div>
+        <div class="loadMoreAchievs"></div>
         <!-- <div class="columns is-centered">
           <div class="column has-background-dark is-one-fifth mycard">
             <div class="card-image">

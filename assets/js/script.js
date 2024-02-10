@@ -1,11 +1,15 @@
 //test div for test achievement list
-var testDivEl = document.querySelector("#test-div")
+var achievementDivEl = document.querySelector("#achievement-div")
 //test div for game cards
 var gameSearchCards = document.querySelector(".gameSearch")
 var loadMoreDiv = document.querySelector("#loadMore")
+var selectedGameDiv = document.querySelector(".selectedGame")
+var loadMoreAchievsDiv = document.querySelector(".loadMoreAchievs")
+var searchGameBoxDiv = document.querySelector("#search-game-box")
+var searchBoxHolderDiv = document.querySelector("#search-box-holder")
 
 var gameCardsEl = document.querySelectorAll(".mycard")
-console.log(gameCardsEl)
+
 
 var gameSearchInput = document.querySelector("#game-search");
 var searchBtn = document.querySelector("#search-button");
@@ -14,6 +18,7 @@ var searchBtn = document.querySelector("#search-button");
 var selectedGameImg = ""
 var selectedGameName = ""
 var selectedGameId = ""
+var achievementCount = 1
 // our youtube key
 const ytKey = "AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY";
 
@@ -30,8 +35,6 @@ var ytURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxRe
 function searchGame(){
 fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search=" + gameSearchKeyword).then(res => res.json()).then(data=> {
     console.log(data);
-
-    console.log(data.results[0].background_image)
       var count = 0
       var countLimiter = 4
     function createGameCards (){
@@ -41,26 +44,68 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
       gameSearchCards.appendChild(gameCardsHolder);
       
       for(i=count; i < countLimiter; i++){
-        
         var gameCard = document.createElement('div')
         gameCard.classList = "column achievement-box is-one-fifth mycard"
+        gameCardsHolder.appendChild(gameCard)
         //
-        gameCard.setAttribute("data-gameID", data.results[i].id)
+        // gameCard.setAttribute("data-gameID", data.results[i].id)
 
+        let loopCard = data.results[i]
         gameCard.addEventListener("click", function(){
-
-          selectedGameId =""
-          selectedGameImg = ""
-          selectedGameName = gameName.textContent
-          selectedGameId = gameCard.getAttribute("data-gameId")
-  
-          console.log(selectedGameImg)
-          console.log(selectedGameName)
-          console.log(selectedGameId)
           
+          selectedGameImg = loopCard.background_image
+          selectedGameName = loopCard.name
+          selectedGameId = loopCard.id
+  
+
+          var gameCardsHolder = document.createElement('div')
+          gameCardsHolder.classList = "columns is-centered ml-1"
+          selectedGameDiv.appendChild(gameCardsHolder);
+        
+
+          var gameCard = document.createElement('div')
+          gameCard.setAttribute("date-gameID", selectedGameId)
+          gameCard.classList = "column achievement-box mycard"
+          gameCardsHolder.appendChild(gameCard)
+
+          var outterGameImgHolder = document.createElement('div')
+          outterGameImgHolder.classList = "card-iamge"
+          gameCard.appendChild(outterGameImgHolder)
+      
+          var gameImgHolder = document.createElement('figure')
+          gameImgHolder.classList = "image is-4by3"
+          outterGameImgHolder.appendChild(gameImgHolder)
+      
+          var gameImg = document.createElement('img')
+          gameImg.classList = "game-img"
+          gameImg.src = selectedGameImg
+          gameImgHolder.appendChild(gameImg)
+      
+          var gameNameHolder = document.createElement('div')
+          gameCard.appendChild(gameNameHolder)
+      
+          var gameName = document.createElement('p')
+          gameName.classList = "game-title has-text-centered py-1 mt-2"
+          gameName.textContent = selectedGameName
+          gameNameHolder.appendChild(gameName)
+
+          var currentGameTag = document.createElement('p')
+          currentGameTag.textContent = "Current Game"
+          currentGameTag.classList = "game-search-btn"
+          currentGameTag.style = "color: #74cc2b"
+          selectedGameDiv.appendChild(currentGameTag)
+
+          searchBoxHolderDiv.classList.add("columns", "is-vcentered")
+          searchGameBoxDiv.classList.add("column")
+          
+          loadMoreDiv.innerHTML = ""
+          gameSearchCards.innerHTML = ""
+
+
+          getAchievments();
         })
 
-        gameCardsHolder.appendChild(gameCard)
+        
     
         var outterGameImgHolder = document.createElement('div')
         outterGameImgHolder.classList = "card-iamge"
@@ -82,12 +127,12 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
         gameName.classList = "game-title has-text-centered py-1 mt-2"
         gameName.textContent = data.results[i].name
         gameNameHolder.appendChild(gameName)
-    
+        
       }
-      console.log(gameSearchCards)
 
-      var gameCardsOnPage = document.querySelectorAll(".mycard")
-      console.log(gameCardsOnPage)
+
+      // var gameCardsOnPage = document.querySelectorAll(".mycard")
+
       
     }
 
@@ -112,8 +157,14 @@ searchBtn.addEventListener("click", function(event){
     event.preventDefault();
     gameSearchCards.innerHTML = ""
     loadMoreDiv.innerHTML = ""
+    achievementDivEl.innerHTML = ""
+    selectedGameDiv.innerHTML = ""
+    selectedGameName = ""
+    selectedGameImg = ""
+    selectedGameId = ""
+    achievementCount = 1
     gameSearchKeyword = gameSearchInput.value.trim()
-    console.log (gameSearchKeyword)
+
 
 
     
@@ -123,111 +174,117 @@ searchBtn.addEventListener("click", function(event){
 
 // get achievments from searched Game
 function getAchievments(){
-fetch("https://api.rawg.io/api/games/5679/achievements?key=3aa9c76d2f81440cb15bd3f113bf0db5&page=1&page_size=40").then(res => res.json()).then(data=> {
+fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa9c76d2f81440cb15bd3f113bf0db5&page=" + achievementCount + "&page_size=40").then(res => res.json()).then(data=> {
     console.log(data);
-    console.log(data.results.length)
+
+    
+
+    function createAchievementList(){
+      
+      // loop to append achievements to the page
+      for(var i = 0; i < data.results.length; i++){
+          var achievementBoxEl = document.createElement('div')
+          achievementBoxEl.classList = "achievement-box";
+      
+          achievementDivEl.appendChild(achievementBoxEl)
+      
+          var articleEl = document.createElement('article')
+          articleEl.classList = "media"
+          //create button add button id achievbutton[i]
+          
+          achievementBoxEl.appendChild(articleEl)
+      
+          var divMediaLeft = document.createElement('div')
+          divMediaLeft.classList = "media-left"
+      
+          articleEl.appendChild(divMediaLeft)
+      
+          var imgHolder = document.createElement('figure')
+          imgHolder.classList = "image is-64x64 mt-2 mx-2"
+      
+          divMediaLeft.appendChild(imgHolder)
+      
+          var achievementImg = document.createElement('img')
+          
+          //gets the image from the results
+          achievementImg.src = data.results[i].image
+          imgHolder.appendChild(achievementImg)
+      
+          var contentHolder = document.createElement('div')
+          contentHolder.classList = "media-content"
+      
+          articleEl.appendChild(contentHolder)
+      
+          var contentDiv = document.createElement('div')
+          contentDiv.classList = "content", "is-vcentered"
+          contentHolder.appendChild(contentDiv)
+          
+      
+          var achievementInfo = document.createElement('p')
+          contentDiv.appendChild(achievementInfo)
+      
+          var achievementName = document.createElement('strong')
+          achievementName.classList = "achievement-name"
+          //gets the achievement name
+          achievementName.textContent = data.results[i].name
+      //
+          achievementInfo.appendChild(achievementName)
+      
+          var spacing = document.createElement('br')
+          achievementName.appendChild(spacing)
+      
+          var achievementPercent = document.createElement('small')
+          //get achievement percentage
+          achievementPercent.textContent = data.results[i].percent + "% of players have completed"
+          
+          achievementInfo.appendChild(achievementPercent)
+      //
+          var spacing = document.createElement('br')
+          achievementPercent.appendChild(spacing)
+      
+          var achievementDescription = document.createElement('small')
+          //get achievement description
+          achievementDescription.textContent = "Achievement Description: " + data.results[i].description
+      
+          achievementInfo.appendChild(achievementDescription)
+      //
+          
+      }
+      }
+
+      
+      if (data.next !== null) {
+        var loadMoreAchievsBtn = document.createElement('btn')
+        loadMoreAchievsBtn.classList = "game-search-btn button is-light is-large py-5 my-7 ml-6 mr-6"
+        loadMoreAchievsBtn.style = "background-color: black; color: #74cc2b;"
+        loadMoreAchievsBtn.textContent = "Load More Achievements"
+        loadMoreAchievsDiv.appendChild(loadMoreAchievsBtn)
+
+        loadMoreAchievsBtn.addEventListener ("click", function(){
+          loadMoreAchievsDiv.innerHTML = ""
+          achievementCount = achievementCount + 1
+          getAchievments()
+        })
+
+      } else {
+        loadMoreAchievsDiv.innerHTML = ""
+      }
+      
+      
+      createAchievementList()
 })
 }
 
-function createAchievementList(){
-//demo array for testing the loop to dynamically create the achievment list
-var demoArray = [
-    {
-        "name": "Dragonrider",
-        "description": "Tame and ride 5 dragons",
-        "image": "https://media.rawg.io/media/achievements/ad4/ad49fa1746d79f4c1bc905864d9e8e77.jpg",
-        "percent": "7.52"
-    },
-    {
-        "name": "Legend",
-        "description": "Defeat a Legendary Dragon",
-        "image": "https://media.rawg.io/media/achievements/326/326280dad53e5abe61a9e0e16cdc9f73.jpg",
-        "percent": "8.40"
-    }
-]
-
-// loop to append achievements to the page
-for(var i = 0; i < demoArray.length; i++){
-    var achievementBoxEl = document.createElement('div')
-    achievementBoxEl.classList = "achievement-box";
-
-    testDivEl.appendChild(achievementBoxEl)
-
-    var articleEl = document.createElement('article')
-    articleEl.classList = "media"
-    //create button add button id achievbutton[i]
-    
-    achievementBoxEl.appendChild(articleEl)
-
-    var divMediaLeft = document.createElement('div')
-    divMediaLeft.classList = "media-left"
-
-    articleEl.appendChild(divMediaLeft)
-
-    var imgHolder = document.createElement('figure')
-    imgHolder.classList = "image is-64x64 mt-2 mx-2"
-
-    divMediaLeft.appendChild(imgHolder)
-
-    var achievementImg = document.createElement('img')
-    
-    //gets the image from the results
-    achievementImg.src = demoArray[i].image
-    imgHolder.appendChild(achievementImg)
-
-    var contentHolder = document.createElement('div')
-    contentHolder.classList = "media-content"
-
-    articleEl.appendChild(contentHolder)
-
-    var contentDiv = document.createElement('div')
-    contentDiv.classList = "content", "is-vcentered"
-    contentHolder.appendChild(contentDiv)
-    
-
-    var achievementInfo = document.createElement('p')
-    contentDiv.appendChild(achievementInfo)
-
-    var achievementName = document.createElement('strong')
-    achievementName.classList = "achievement-name"
-    //gets the achievement name
-    achievementName.textContent = demoArray[i].name
-//
-    achievementInfo.appendChild(achievementName)
-
-    var spacing = document.createElement('br')
-    achievementName.appendChild(spacing)
-
-    var achievementPercent = document.createElement('small')
-    //get achievement percentage
-    achievementPercent.textContent = demoArray[i].percent + "% of players have completed"
-    
-    achievementInfo.appendChild(achievementPercent)
-//
-    var spacing = document.createElement('br')
-    achievementPercent.appendChild(spacing)
-
-    var achievementDescription = document.createElement('small')
-    //get achievement description
-    achievementDescription.textContent = "Achievement Description: " + demoArray[i].description
-
-    achievementInfo.appendChild(achievementDescription)
-//
-    
-}
-}
-
-createAchievementList()
 
 
-// search youtube for how to's on selected achievment
-var ytAltURL = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&part=player&maxResults=25&q=surfing&videoEmbeddable=true&key=[YOUR_API_KEY]"
 
 function searchYoutube(){
 fetch("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=skyrim%20how%20to%20get%20dragon%20rider%20achievement&key=AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY").then(res => res.json()).then(data=> {
     console.log(data);
 })
 }
+
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -267,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     // Add a keyboard event to close all modals
     document.addEventListener('keydown', (event) => {
-      if(e.key === "Escape") {
+      if(event.key === "Escape") {
         closeAllModals();
       }
     });
