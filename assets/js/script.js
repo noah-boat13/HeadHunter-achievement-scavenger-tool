@@ -131,7 +131,7 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
       }
 
 
-      // var gameCardsOnPage = document.querySelectorAll(".mycard")
+      
 
       
     }
@@ -162,6 +162,7 @@ searchBtn.addEventListener("click", function(event){
     selectedGameName = ""
     selectedGameImg = ""
     selectedGameId = ""
+    loadMoreAchievsDiv.innerHTML = ""
     achievementCount = 1
     gameSearchKeyword = gameSearchInput.value.trim()
 
@@ -177,6 +178,7 @@ function getAchievments(){
 fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa9c76d2f81440cb15bd3f113bf0db5&page=" + achievementCount + "&page_size=40").then(res => res.json()).then(data=> {
     console.log(data);
 
+    // Add an if statement 
     
 
     function createAchievementList(){
@@ -247,7 +249,16 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
           achievementDescription.textContent = "Achievement Description: " + data.results[i].description
       
           achievementInfo.appendChild(achievementDescription)
-      //
+
+          
+
+          let loopAchieve = data.results[i]
+
+          youtubeBtn.addEventListener("click", function(){
+
+
+          })
+      
           
       }
       }
