@@ -56,7 +56,7 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
           selectedGameImg = loopCard.background_image
           selectedGameName = loopCard.name
           selectedGameId = loopCard.id
-  
+          populateLocalStorage();
 
           var gameCardsHolder = document.createElement('div')
           gameCardsHolder.classList = "columns is-centered ml-1"
@@ -248,7 +248,16 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
       
           achievementInfo.appendChild(achievementDescription)
       //
-          
+          var playDiv = document.createElement("div");
+          playDiv.classList ="media-right mt-5 mx-2"
+          articleEl.appendChild(playDiv);
+
+          var playBtn = document.createElement("i");
+          playBtn.classList = "fa-brands fa-youtube fa-2xl";
+          playBtn.style = "color: #74cc2b;";
+          playDiv.appendChild(playBtn);
+       
+        
       }
       }
 
@@ -329,3 +338,46 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+ pullLocalStorage();
+  // function to set up local storage 
+  function populateLocalStorage() {
+    localStorage.setItem("gameImg", selectedGameImg);
+    localStorage.setItem("gameName", selectedGameName);
+    localStorage.setItem("gameId", selectedGameId);
+  }
+
+    function pullLocalStorage() {
+     var storedGameImg = localStorage.getItem("gameImg");
+     var storedGameName = localStorage.getItem("gameName");
+     var storedGameId = localStorage.getItem("gameId");
+     
+     if (localStorage == null) {
+      return;
+     }
+     selectedGameImg = storedGameImg;
+     selectedGameName = storedGameName;
+     selectedGameId = storedGameId;
+     getAchievments();
+    }
+
+     
+     
+     
+     
+      // if (localStorage !== null) 
+      // localStorage.getItem("gameImg");
+        
+      // localStorage.getItem("gameName");
+      // selectedGameName = gameName
+      // localStorage.getItem("gameId")
+      // console.log("pullLocalStorageWorking?");
+      // console.log(selectedGameName);
+    // } 
+    
+  
+
+  // selectedGameImg 
+  // selectedGameName 
+  // selectedGameId 
+  
