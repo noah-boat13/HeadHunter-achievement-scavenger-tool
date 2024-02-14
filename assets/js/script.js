@@ -45,7 +45,7 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
       
       for(i=count; i < countLimiter; i++){
         var gameCard = document.createElement('div')
-        gameCard.classList = "column achievement-box is-one-fifth mycard"
+        gameCard.classList = "column achievement-box is-one-fifth mycard hover-action"
         gameCardsHolder.appendChild(gameCard)
         //
         // gameCard.setAttribute("data-gameID", data.results[i].id)
@@ -249,7 +249,7 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
           achievementInfo.appendChild(achievementDescription)
       //
           var playDiv = document.createElement("div");
-          playDiv.classList ="media-right mt-5 mx-2"
+          playDiv.classList ="media-right mt-5 mx-2 hover-action-2"
           articleEl.appendChild(playDiv);
 
           var playBtn = document.createElement("i");

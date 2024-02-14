@@ -15,8 +15,7 @@
         font-family: 'Orbitron', sans-serif;
         font-weight: 400;
         font-size: 42px;
-        text-shadow: rgba(36, 231, 189, 0.692) 5px 0 5px;
-        color: black;
+       color: black;
         
         
     }
@@ -72,4 +71,28 @@ p, button {
     margin: 10px;
     border-radius: 10px;
   }
+
+#search-button:hover {
+    cursor: pointer;
+}
+
+#search-button:active {
+ 
+    background-color: #fff;
+  
+    box-shadow: 0px 0px 12px 10px #74cc2b;
+}
+
+.hover-action:hover {
+    background-color: #3b3b5f;
+    color: #74cc2b;
+    cursor: pointer;
+    box-shadow: 0px 0px 12px 10px #74cc2b;
+}
+
+.hover-action-2:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 10px 5px #EE61FF;
+
+}
 
