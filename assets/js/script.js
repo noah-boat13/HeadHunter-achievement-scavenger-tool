@@ -7,6 +7,7 @@ var selectedGameDiv = document.querySelector(".selectedGame")
 var loadMoreAchievsDiv = document.querySelector(".loadMoreAchievs")
 var searchGameBoxDiv = document.querySelector("#search-game-box")
 var searchBoxHolderDiv = document.querySelector("#search-box-holder")
+const ourmodal = document.querySelector(".our-modal")
 
 var gameCardsEl = document.querySelectorAll(".mycard")
 
@@ -18,7 +19,13 @@ var searchBtn = document.querySelector("#search-button");
 var selectedGameImg = ""
 var selectedGameName = ""
 var selectedGameId = ""
+var selectedAchievementId = ""
 var achievementCount = 1
+var achievementIdCount = 0
+
+//holds the selected achievement name
+var selectedAchievment = ""
+
 // our youtube key
 const ytKey = "AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY";
 
@@ -58,48 +65,7 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
           selectedGameId = loopCard.id
           populateLocalStorage();
 
-          var gameCardsHolder = document.createElement('div')
-          gameCardsHolder.classList = "columns is-centered ml-1"
-          selectedGameDiv.appendChild(gameCardsHolder);
-        
-
-          var gameCard = document.createElement('div')
-          gameCard.setAttribute("date-gameID", selectedGameId)
-          gameCard.classList = "column achievement-box mycard"
-          gameCardsHolder.appendChild(gameCard)
-
-          var outterGameImgHolder = document.createElement('div')
-          outterGameImgHolder.classList = "card-iamge"
-          gameCard.appendChild(outterGameImgHolder)
-      
-          var gameImgHolder = document.createElement('figure')
-          gameImgHolder.classList = "image is-4by3"
-          outterGameImgHolder.appendChild(gameImgHolder)
-      
-          var gameImg = document.createElement('img')
-          gameImg.classList = "game-img"
-          gameImg.src = selectedGameImg
-          gameImgHolder.appendChild(gameImg)
-      
-          var gameNameHolder = document.createElement('div')
-          gameCard.appendChild(gameNameHolder)
-      
-          var gameName = document.createElement('p')
-          gameName.classList = "game-title has-text-centered py-1 mt-2"
-          gameName.textContent = selectedGameName
-          gameNameHolder.appendChild(gameName)
-
-          var currentGameTag = document.createElement('p')
-          currentGameTag.textContent = "Current Game"
-          currentGameTag.classList = "game-search-btn"
-          currentGameTag.style = "color: #74cc2b"
-          selectedGameDiv.appendChild(currentGameTag)
-
-          searchBoxHolderDiv.classList.add("columns", "is-vcentered")
-          searchGameBoxDiv.classList.add("column")
-          
-          loadMoreDiv.innerHTML = ""
-          gameSearchCards.innerHTML = ""
+          createCurrentGameCard();
 
 
           getAchievments();
@@ -136,6 +102,9 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
       
     }
 
+
+
+
     createGameCards();
 
     var loadMoreBtn = document.createElement('btn')
@@ -163,6 +132,7 @@ searchBtn.addEventListener("click", function(event){
     selectedGameImg = ""
     selectedGameId = ""
     loadMoreAchievsDiv.innerHTML = ""
+    achievementIdCount = 0
     achievementCount = 1
     gameSearchKeyword = gameSearchInput.value.trim()
 
@@ -189,9 +159,13 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
           achievementBoxEl.classList = "achievement-box";
       
           achievementDivEl.appendChild(achievementBoxEl)
+
+
       
           var articleEl = document.createElement('article')
           articleEl.classList = "media"
+          
+          
           //create button add button id achievbutton[i]
           
           achievementBoxEl.appendChild(articleEl)
@@ -251,21 +225,37 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
           achievementInfo.appendChild(achievementDescription)
 
           
-          var playDiv = document.createElement("div");
-          playDiv.classList ="media-right mt-5 mx-2"
+          let playDiv = document.createElement('div');
+          playDiv.classList = "media-right mt-5 mx-2"
           articleEl.appendChild(playDiv);
 
-          var playBtn = document.createElement("i");
+          var playBtn = document.createElement('i');
           playBtn.classList = "fa-brands fa-youtube fa-2xl";
           playBtn.style = "color: #74cc2b;";
           playDiv.appendChild(playBtn);
 
+          var playBtnTxt = document.createElement('p')
+          playBtnTxt.textContent = "How to achieve"
+          playBtnTxt.style = "color: #74cc2b;";
+          playBtnTxt.style = "font-family: 'Orbitron', sans-serif;"
+          playDiv.appendChild(playBtnTxt)
+
+          let youtubeCardsHolder = document.createElement('div')
+          youtubeCardsHolder.classList = "columns is-centered my-2 py-1"
+          youtubeCardsHolder.style = "background-color: black;"
+          youtubeCardsHolder.id = "achievement-" + achievementIdCount
+          achievementBoxEl.appendChild(youtubeCardsHolder);
+
           let loopAchieve = data.results[i]
-
+          let loopId = achievementIdCount
+          achievementIdCount++
           playDiv.addEventListener("click", function(){
-            
-
-
+            selectedAchievment = loopAchieve.name
+            selectedAchievementId = loopId
+            console.log(selectedAchievementId)
+            resetYoutubeCards()
+            currentYoutubeDiv = youtubeCardsHolder
+            searchYoutube();
           })
        
         
@@ -294,13 +284,82 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
       createAchievementList()
 })
 }
+var currentYoutubeDiv = null;
+function resetYoutubeCards(){
+  if (currentYoutubeDiv !== null){
+    currentYoutubeDiv.innerHTML = ""
+  }
+} 
 
 
+const testVideoSearch = 'https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=UnwNdenlVak&key=AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY'
+
+const finishedVideoSearch = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q="+ selectedGameName + "%20how%20to%20get%20" + selectedAchievment + "%20achievement&key=AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY"
 
 
 function searchYoutube(){
-fetch("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=skyrim%20how%20to%20get%20dragon%20rider%20achievement&key=AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY").then(res => res.json()).then(data=> {
+fetch(testVideoSearch).then(res => res.json()).then(data=> {
     console.log(data);
+    console.log(data.items.length)
+
+    console.log(achievementIdCount)
+    var selectedYoutubeCardsHolder = document.querySelector("#achievement-" + selectedAchievementId)
+    console.log(selectedYoutubeCardsHolder)
+
+    for(i=0; i<data.items.length; i++){
+      var youtubeCard = document.createElement('div')
+      youtubeCard.classList = "column achievement-box is-one-fifth mycard"
+      selectedYoutubeCardsHolder.appendChild(youtubeCard)
+
+      var outterYoutubeImgHolder = document.createElement('div')
+        outterYoutubeImgHolder.classList = "card-image"
+        youtubeCard.appendChild(outterYoutubeImgHolder)
+    
+      var youtubeImgHolder = document.createElement('figure')
+        //youtubeImgHolder.classList = "image is-4by3"
+        outterYoutubeImgHolder.appendChild(youtubeImgHolder)
+    
+      var youtubeImg = document.createElement('img')
+        youtubeImg.classList = "game-img"
+        youtubeImg.style = "width='320' height='180';"
+        youtubeImg.src = data.items[i].snippet.thumbnails.medium.url
+        youtubeImgHolder.appendChild(youtubeImg)
+
+      var spacing = document.createElement('br')
+        youtubeCard.appendChild(spacing)
+    
+      var youtubeNameHolder = document.createElement('div')
+        youtubeCard.appendChild(youtubeNameHolder)
+    
+      var youtubeName = document.createElement('p')
+        youtubeName.classList = "game-title has-text-centered py-1 mt-2"
+        youtubeName.textContent = data.items[i].snippet.title
+        youtubeNameHolder.appendChild(youtubeName)
+
+      let loopYoutubeId = data.items[i].id
+      youtubeCard.addEventListener("click", function(){
+        ourmodal.innerHTML = '<div class="modal"></div>  <iframe class="modal-video" src="https://www.youtube.com/embed/' + loopYoutubeId + '"frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>';
+        console.log(ourmodal)
+        ourmodal.style.display = "flex"
+
+        setTimeout(function(){
+          ourmodal.style.opacity = "1";
+        }, 50);
+        
+
+        ourmodal.addEventListener("click", function(){
+          ourmodal.innerHTML = '';
+          ourmodal.style.opacity = "0";
+          setTimeout(function(){
+            ourmodal.style.display = "none";
+          },450);
+
+        })
+      })
+
+    }
+
+
 })
 }
 
@@ -363,32 +422,59 @@ document.addEventListener('DOMContentLoaded', () => {
      var storedGameName = localStorage.getItem("gameName");
      var storedGameId = localStorage.getItem("gameId");
      
-     if (localStorage == null) {
+     if (storedGameId === null) {
       return;
      }
      selectedGameImg = storedGameImg;
      selectedGameName = storedGameName;
      selectedGameId = storedGameId;
+     createCurrentGameCard();
      getAchievments();
     }
 
      
-     
-     
-     
-      // if (localStorage !== null) 
-      // localStorage.getItem("gameImg");
+    function createCurrentGameCard (){
+      var gameCardsHolder = document.createElement('div')
+          gameCardsHolder.classList = "columns is-centered ml-1"
+          selectedGameDiv.appendChild(gameCardsHolder);
         
-      // localStorage.getItem("gameName");
-      // selectedGameName = gameName
-      // localStorage.getItem("gameId")
-      // console.log("pullLocalStorageWorking?");
-      // console.log(selectedGameName);
-    // } 
-    
-  
 
-  // selectedGameImg 
-  // selectedGameName 
-  // selectedGameId 
-  
+          var gameCard = document.createElement('div')
+          gameCard.setAttribute("date-gameID", selectedGameId)
+          gameCard.classList = "column achievement-box mycard"
+          gameCardsHolder.appendChild(gameCard)
+
+          var outterGameImgHolder = document.createElement('div')
+          outterGameImgHolder.classList = "card-iamge"
+          gameCard.appendChild(outterGameImgHolder)
+      
+          var gameImgHolder = document.createElement('figure')
+          gameImgHolder.classList = "image is-4by3"
+          outterGameImgHolder.appendChild(gameImgHolder)
+      
+          var gameImg = document.createElement('img')
+          gameImg.classList = "game-img"
+          gameImg.src = selectedGameImg
+          gameImgHolder.appendChild(gameImg)
+      
+          var gameNameHolder = document.createElement('div')
+          gameCard.appendChild(gameNameHolder)
+      
+          var gameName = document.createElement('p')
+          gameName.classList = "game-title has-text-centered py-1 mt-2"
+          gameName.textContent = selectedGameName
+          gameNameHolder.appendChild(gameName)
+
+          var currentGameTag = document.createElement('p')
+          currentGameTag.textContent = "Current Game"
+          currentGameTag.classList = "game-search-btn"
+          currentGameTag.style = "color: #74cc2b"
+          selectedGameDiv.appendChild(currentGameTag)
+
+          searchBoxHolderDiv.classList.add("columns", "is-vcentered")
+          searchGameBoxDiv.classList.add("column")
+          
+          loadMoreDiv.innerHTML = ""
+          gameSearchCards.innerHTML = ""
+    }
+     
