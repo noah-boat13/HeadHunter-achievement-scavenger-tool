@@ -7,6 +7,7 @@ var selectedGameDiv = document.querySelector(".selectedGame")
 var loadMoreAchievsDiv = document.querySelector(".loadMoreAchievs")
 var searchGameBoxDiv = document.querySelector("#search-game-box")
 var searchBoxHolderDiv = document.querySelector("#search-box-holder")
+var searchGameInputDiv = document.querySelector(".game-input")
 const ourmodal = document.querySelector(".our-modal")
 
 var gameCardsEl = document.querySelectorAll(".mycard")
@@ -25,6 +26,8 @@ var achievementIdCount = 0
 
 //holds the selected achievement name
 var selectedAchievment = ""
+
+var isLoading = false;
 
 // our youtube key
 const ytKey = "AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY";
@@ -59,16 +62,16 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
 
         let loopCard = data.results[i]
         gameCard.addEventListener("click", function(){
-          
+          if(isLoading === false){
+            isLoading = true;
           selectedGameImg = loopCard.background_image
           selectedGameName = loopCard.name
           selectedGameId = loopCard.id
           populateLocalStorage();
-
           createCurrentGameCard();
-
-
           getAchievments();
+          isLoading = false;
+          }
         })
 
         
@@ -99,7 +102,7 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
 
       
 
-      
+      isLoading = false
     }
 
 
@@ -112,22 +115,67 @@ fetch("https://api.rawg.io/api/games?key=3aa9c76d2f81440cb15bd3f113bf0db5&search
     loadMoreBtn.style = "background-color: black; color: #74cc2b;"
     loadMoreBtn.textContent = "Load More"
     loadMoreBtn.addEventListener ("click", function(){
+      if(isLoading === false){
+      isLoading = true
       count = count + 4;
       countLimiter = countLimiter + 4;
       createGameCards()
+      isLoading = false
+      }
+    
     })
     loadMoreDiv.appendChild(loadMoreBtn)
-
+    
 })
 }
+var isFocusing = false
+searchGameInputDiv.addEventListener("focusin", function(){
+isFocusing = true
+})
 
+searchGameInputDiv.addEventListener("focusout", function(){
+  isFocusing = false
+  })
+
+searchGameInputDiv.addEventListener("keydown", function(e){
+  if(isFocusing === true){
+    if(e.key === "Enter"){
+      if (isLoading === false){
+        isLoading = true
+        e.preventDefault()
+        gameSearchCards.innerHTML = ""
+        loadMoreDiv.innerHTML = ""
+        achievementDivEl.innerHTML = ""
+        selectedGameDiv.innerHTML = ""
+        searchBoxHolderDiv.classList.remove("columns", "is-vcentered")
+        searchGameBoxDiv.classList.remove("column")
+        selectedGameName = ""
+        selectedGameImg = ""
+        selectedGameId = ""
+        loadMoreAchievsDiv.innerHTML = ""
+        achievementIdCount = 0
+        achievementCount = 1
+        gameSearchKeyword = gameSearchInput.value.trim()
+    
+    
+    
+        
+        searchGame();
+      }
+    }
+  }
+})
 // when the search button is clicked it updates the value to enter into the url to search the game
 searchBtn.addEventListener("click", function(event){
+  if (isLoading === false){
+    isLoading = true
     event.preventDefault();
     gameSearchCards.innerHTML = ""
     loadMoreDiv.innerHTML = ""
     achievementDivEl.innerHTML = ""
     selectedGameDiv.innerHTML = ""
+    searchBoxHolderDiv.classList.remove("columns", "is-vcentered")
+    searchGameBoxDiv.classList.remove("column")
     selectedGameName = ""
     selectedGameImg = ""
     selectedGameId = ""
@@ -140,16 +188,25 @@ searchBtn.addEventListener("click", function(event){
 
     
     searchGame();
-  
+  }
 })
 
 // get achievments from searched Game
 function getAchievments(){
 fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa9c76d2f81440cb15bd3f113bf0db5&page=" + achievementCount + "&page_size=40").then(res => res.json()).then(data=> {
     console.log(data);
-
+    console.log(data.count)
     // Add an if statement 
-    
+    if(data.results.length == 0){
+      var noAchievementDiv = document.createElement ('div')
+      noAchievementDiv.classList = "achievement-box"
+
+      achievementDivEl.appendChild(noAchievementDiv)
+
+      var noAchievementTxt = document.createElement('h1')
+      noAchievementTxt.textContent = "No achievements were found in RAWG for" + selectedGameName
+      noAchievementDiv.appendChild(noAchievementTxt)
+    }
 
     function createAchievementList(){
       
@@ -181,8 +238,7 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
           divMediaLeft.appendChild(imgHolder)
       
           var achievementImg = document.createElement('img')
-          
-          //gets the image from the results
+          achievementImg.classList = "achievementImg"
           achievementImg.src = data.results[i].image
           imgHolder.appendChild(achievementImg)
       
@@ -200,7 +256,7 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
           contentDiv.appendChild(achievementInfo)
       
           var achievementName = document.createElement('strong')
-          achievementName.classList = "achievement-name"
+          achievementName.classList = "has-text-weight-bold is-size-4 achievement-name"
           //gets the achievement name
           achievementName.textContent = data.results[i].name
       //
@@ -210,6 +266,7 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
           achievementName.appendChild(spacing)
       
           var achievementPercent = document.createElement('small')
+          achievementPercent.classList = "is-italic percentTxt"
           //get achievement percentage
           achievementPercent.textContent = data.results[i].percent + "% of players have completed"
           
@@ -220,12 +277,15 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
       
           var achievementDescription = document.createElement('small')
           //get achievement description
-          achievementDescription.textContent = "Achievement Description: " + data.results[i].description
-      
+          if(data.results[i].description == ""){
+            achievementDescription.textContent = "No Achievement Description Available"
+          } else {
+          achievementDescription.textContent = '"' + data.results[i].description + '"'
+          }
           achievementInfo.appendChild(achievementDescription)
       //
           var playDiv = document.createElement("div");
-          playDiv.classList ="media-right mt-5 mx-2 hover-action-2"
+          playDiv.classList ="playbtn media-right mx-2 hover-action-2"
           articleEl.appendChild(playDiv);
 
           var playBtn = document.createElement('i');
@@ -263,8 +323,9 @@ fetch("https://api.rawg.io/api/games/" + selectedGameId + "/achievements?key=3aa
 
       
       if (data.next !== null) {
+
         var loadMoreAchievsBtn = document.createElement('btn')
-        loadMoreAchievsBtn.classList = "game-search-btn button is-light is-large py-5 my-7 ml-6 mr-6"
+        loadMoreAchievsBtn.classList = "is-centered game-search-btn button is-light is-large py-5 my-7 ml-6 mr-6"
         loadMoreAchievsBtn.style = "background-color: black; color: #74cc2b;"
         loadMoreAchievsBtn.textContent = "Load More Achievements"
         loadMoreAchievsDiv.appendChild(loadMoreAchievsBtn)
@@ -293,11 +354,12 @@ function resetYoutubeCards(){
 
 const testVideoSearch = 'https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=UnwNdenlVak&key=AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY'
 
-const finishedVideoSearch = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q="+ selectedGameName + "%20how%20to%20get%20" + selectedAchievment + "%20achievement&key=AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY"
+var finishedVideoSearch = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q="+ selectedGameName + "%20how%20to%20get%20" + selectedAchievment + "%20achievement&key=AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY"
 
 
-function searchYoutube(){
-fetch(testVideoSearch).then(res => res.json()).then(data=> {
+function searchYoutube(){if(isLoading === false){
+isLoading = true
+fetch("https://youtube.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q="+ selectedGameName + "%20how%20to%20get%20" + selectedAchievment + "%20achievement&key=AIzaSyDLxdkAoPEq_7O3GIEVsz7vhGPmt1ffXtY").then(res => res.json()).then(data=> {
     console.log(data);
     console.log(data.items.length)
 
@@ -307,7 +369,7 @@ fetch(testVideoSearch).then(res => res.json()).then(data=> {
 
     for(i=0; i<data.items.length; i++){
       var youtubeCard = document.createElement('div')
-      youtubeCard.classList = "column achievement-box is-one-fifth mycard"
+      youtubeCard.classList = "column achievement-box is-one-fifth mycard hover-action"
       selectedYoutubeCardsHolder.appendChild(youtubeCard)
 
       var outterYoutubeImgHolder = document.createElement('div')
@@ -335,7 +397,7 @@ fetch(testVideoSearch).then(res => res.json()).then(data=> {
         youtubeName.textContent = data.items[i].snippet.title
         youtubeNameHolder.appendChild(youtubeName)
 
-      let loopYoutubeId = data.items[i].id
+      let loopYoutubeId = data.items[i].id.videoId
       youtubeCard.addEventListener("click", function(){
         ourmodal.innerHTML = '<div class="modal"></div>  <iframe class="modal-video" src="https://www.youtube.com/embed/' + loopYoutubeId + '"frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>';
         console.log(ourmodal)
@@ -353,6 +415,7 @@ fetch(testVideoSearch).then(res => res.json()).then(data=> {
             ourmodal.style.display = "none";
           },450);
 
+
         })
       })
 
@@ -360,53 +423,13 @@ fetch(testVideoSearch).then(res => res.json()).then(data=> {
 
 
 })
+setTimeout(function(){
+  isLoading = false
+},1000);
+}
 }
 
 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Functions to open and close a modal
-    function openModal($el) {
-      $el.classList.add('is-active');
-    }
-  
-    function closeModal($el) {
-      $el.classList.remove('is-active');
-    }
-  
-    function closeAllModals() {
-      (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-        closeModal($modal);
-      });
-    }
-  
-    // Add a click event on buttons to open a specific modal
-    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-      const modal = $trigger.dataset.target;
-      const $target = document.getElementById(modal);
-  
-      $trigger.addEventListener('click', () => {
-        openModal($target);
-      });
-    });
-  
-    // Add a click event on various child elements to close the parent modal
-    (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-      const $target = $close.closest('.modal');
-  
-      $close.addEventListener('click', () => {
-        closeModal($target);
-      });
-    });
-  
-    // Add a keyboard event to close all modals
-    document.addEventListener('keydown', (event) => {
-      if(event.key === "Escape") {
-        closeAllModals();
-      }
-    });
-  });
 
  pullLocalStorage();
   // function to set up local storage 
