@@ -51,8 +51,26 @@ h1 {
     text-shadow: #FC0 1px 0 10px;
 }
 
+.playbtn {
+    background-color: rgba(67, 52, 151, 0.43);
+    padding-top: 5px;
+    border-radius: 5px;
+    height: 100%;
+    width: 15%;
+    margin-top: 1.8%;
+}
 
+.achievementImg {
+    padding-top: 8px;
+    border-radius: 5px;
+    height: 100%;
+    width: 15%;
+    margin-top: 1.8%;
+}
 
+.percentTxt{
+    color: rgba(238, 97, 255, 0.4) ;
+}
 p, button {
     text-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
     color: #EE61FF;
@@ -72,6 +90,42 @@ p, button {
     border-radius: 10px;
   }
 
+.our-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .8);
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(5px);
+    overflow-y: scroll;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.modal-video {
+    width: 70vw;
+    height: 85vh;
+    position: relative;
+    padding-top: 15vh;
+    margin: 2em 0;
+}
+
+.modal-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: none;
+
+    
+}
+
+.our-modal {
+    display: none;
+    opacity: 0;
+}
 #search-button:hover {
     cursor: pointer;
 }
