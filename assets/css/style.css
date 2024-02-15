@@ -2,6 +2,8 @@
     font-family: 'Orbitron', sans-serif;
     font-weight: 500;
     font-size: 48px;
+    padding-top: 200px;
+    margin-top: 200px;
 }
 
 .main-header {
@@ -49,8 +51,27 @@
 
 h1 {
     text-shadow: #FC0 1px 0 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 64px;
+    font-weight: 600;
+    color: #74cc2b;
 }
 
+h2 {
+    text-shadow: #FC0 1px 0 10px;
+}
+
+.navbar {
+    background-color: #21194f;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.quote-box {
+    padding-top: 105px;
+}
 .playbtn {
     background-color: rgba(67, 52, 151, 0.43);
     padding-top: 5px;
